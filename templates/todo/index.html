@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Todo List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Link to Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  
+  <!-- Internal CSS for custom styles -->
+  <style>
+    body {
+      background-color:rgb(16, 13, 26);  /* Light background color */
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      background-color:rgb(143, 123, 185);  /* White background for the main container */
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    h2 {
+      color: #343a40;  /* Dark color for the heading */
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      color: #495057;  /* Dark gray color for labels */
+    }
+
+    .form-control {
+      border-radius: 5px;
+      border: 1px rgba(161, 158, 80, 0.8);
+    }
+
+    .btn-dark {
+      background-color: #343a40;
+      color: white;
+    }
+
+    .btn-dark:hover {
+      background-color: #23272b;  /* Darker shade on hover */
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;  /* Darker red on hover */
+      color: white;
+    }
+
+    .badge-success {
+      background-color: #28a745;
+    }
+
+    table {
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    table th {
+      background-color: #007bff;  /* Blue background for table headers */
+      color: white;
+    }
+
+    table td {
+      vertical-align: middle;
+    }
+
+    .table td a {
+      margin-right: 10px;
+    }
+  </style>
+
+  <!-- Link to Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>TODO LIST</h2>
+    <form action="{% url 'create_todo' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="title">TITLE</label>
+        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title">
+      </div>
+      <div class="form-group">
+        <label for="description">DESCRIPTION</label>
+        <textarea class="form-control" name="description" placeholder="Enter description"></textarea>
+      </div>
+      <button type="submit" class="btn btn-dark">Submit</button>
+    </form>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Sno.</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in todos %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ todo.title }}</td>
+                <td>{{ todo.description }}</td>
+                <td>
+                    {% if todo.completed %}
+                    <span class="badge badge-success">Completed</span>
+                    {% else %}
+                    <a class="btn btn-sm btn-dark" href="{% url 'complete_todo' todo.id %}">Complete</a>
+                    {% endif %}
+                    <a class="btn btn-sm btn-danger" href="{% url 'delete_todo' todo.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
